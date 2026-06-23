@@ -1,6 +1,7 @@
 # src/app_cache.py
 from pathlib import Path
 
+import joblib
 import networkx as nx
 import pandas as pd
 import streamlit as st
@@ -17,14 +18,20 @@ from src.recommender import build_diversion_graph
 from src.risk_model import train_risk_models
 from src.road_network import load_graph
 
+_GRAPH_PATH = Path("data/bengaluru_drive.graphml")
+_MODEL_CACHE = Path("model_cache/trained_models.joblib")
+
 
 @st.cache_resource(show_spinner="Loading road network...")
 def get_road_graph() -> nx.MultiDiGraph:
-    return load_graph(Path("data/bengaluru_drive.graphml"))
+    return load_graph(_GRAPH_PATH)
 
 
-@st.cache_data(show_spinner="Loading data and training models...")
+@st.cache_resource(show_spinner="Loading models...")
 def load_and_train() -> dict:
+    if _MODEL_CACHE.exists():
+        return joblib.load(_MODEL_CACHE)
+
     from src import event_store as _event_store
     _event_store.init_db()
     from src import station_store as _station_store
@@ -63,7 +70,7 @@ def load_and_train() -> dict:
     risk_models = train_risk_models(train_df)
     explainers  = build_explainers(pipeline, risk_models)
 
-    return {
+    result = {
         "train_df":        train_df,
         "baselines":       baselines,
         "low_t":           low_t,
@@ -78,3 +85,6 @@ def load_and_train() -> dict:
         "congestion_auc":  risk_models["congestion_auc"],
         "law_order_auc":   risk_models["law_order_auc"],
     }
+    _MODEL_CACHE.parent.mkdir(parents=True, exist_ok=True)
+    joblib.dump(result, _MODEL_CACHE, compress=3)
+    return result

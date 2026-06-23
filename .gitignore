@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# Data & generated files
+data/events.db
+data/events_enriched.csv
+
+# Streamlit secrets
+.streamlit/secrets.toml
+
+# Logs
+*.log
+.streamlit_*.log
+
+# Cache
+cache/
+
+# Test artifacts
+.pytest_cache/
+test_output.txt
+
+# IDE / OS
+.env
+.DS_Store
+Thumbs.db
+
+# Screenshots (dev)
+.screenshots/
+screenshot_*.png
+
+# Node (Playwright dev dependency)
+node_modules/

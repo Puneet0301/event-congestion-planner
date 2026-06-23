@@ -1,0 +1,2 @@
+report_datetime,event_name,corridor,predicted_severity,predicted_congestion_prob,predicted_law_order_prob,predicted_duration,actual_attendance,officers_deployed,vehicles_used,actual_congestion,law_order_incidents,actual_duration_h,avg_response_time_min,deployment_accuracy,deployment_effectiveness,public_safety_score,challenges,recommendations
+2026-06-22T17:14:41,Public Rally,Airport New South Road,MEDIUM,0.00,0.00,MEDIUM,0,0,0,none,0,2.0,0.0,accurate,3,3,test,test
